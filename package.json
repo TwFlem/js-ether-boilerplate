@@ -2,5 +2,8 @@
   "name": "boilerplate",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "solc": "^0.4.19"
+  }
 }
