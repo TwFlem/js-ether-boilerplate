@@ -9,11 +9,13 @@ const web3 = new Web3(provider);
 let accounts;
 let inbox;
 const defaultMessage = 'hello world!';
+const newMessage = 'goodbye world!';
+
 beforeEach(async () => {
   accounts = await web3.eth.getAccounts();
   inbox = await new web3.eth.Contract(JSON.parse(interface))
     .deploy({ data: bytecode, arguments: [defaultMessage] })
-    .send({ from: accounts[0], gas: '1000000' })
+    .send({ from: accounts[0], gas: '1000000' });
   inbox.setProvider(provider);
 });
 
@@ -22,6 +24,10 @@ describe('Inbox', () => {
     assert.ok(inbox.options.address);
   });
   it('deployed contract has a default message', async () => {
-    assert.ok(await inbox.methods.message().call() === defaultMessage);
+    assert.equal(await inbox.methods.message().call(), defaultMessage);
+  });
+  it('deployed contract can set message', async () => {
+    await inbox.methods.setMessage(newMessage).send({ from: accounts[0], gas: '1000000'});
+    assert.equal(await inbox.methods.message().call(), newMessage);
   });
 });
